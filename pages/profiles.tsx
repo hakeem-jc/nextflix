@@ -46,7 +46,7 @@ const UserCard: React.FC<UserCardProps> = ({ name }) => {
   );
 }
 
-const App = () => {
+const Profiles = () => {
   const router = useRouter();
   const { data: currentUser } = useCurrentUser();
 
@@ -68,4 +68,4 @@ const App = () => {
   );
 }
 
-export default App;
+export default Profiles;
