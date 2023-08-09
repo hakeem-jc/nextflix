@@ -1,7 +1,7 @@
 import React from 'react';
 import { NextPageContext } from 'next';
 import { getSession } from 'next-auth/react';
-import { signOut } from 'next-auth/react';
+import Navbar from '@/components/Navbar';
 import useCurrentUser from '@/hooks/useCurrentUser';
 
 
@@ -27,10 +27,7 @@ const Home = () => {
 
   return (
     <>
-      <p className='text-4xl'>Logged in as : {user?.email}</p>
-      <div onClick={() => signOut()} className="px-3 text-center text-white text-sm hover:underline">
-        Sign out of Netflix
-      </div>
+     <Navbar />
     </>
   )
 }
