@@ -29,7 +29,7 @@ const Home = () => {
   return (
     <>
        <Head>
-        <title>Welcome to Nextflix</title>
+        <title>Nextflix</title>
         <meta property="og:title" content="Nextflix" key="title-home" />
         <meta property="og:description" content="Home page" key="home" />
         <meta property="og:author" content="Hakeem Clarke" key="author" />
