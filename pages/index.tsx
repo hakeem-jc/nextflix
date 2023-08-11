@@ -6,6 +6,7 @@ import Navbar from '@/components/Navbar';
 import Billboard from '@/components/Billboard/Billboard';
 import MovieList from '@/components/MovieList/MovieList';
 import useMovieList from '@/hooks/useMovieList';
+import useFavorites from '@/hooks/useFavorites';
 
 export async function getServerSideProps(context: NextPageContext) {
   const session = await getSession(context);
@@ -26,10 +27,11 @@ export async function getServerSideProps(context: NextPageContext) {
 
 const Home = () => {
   const { data: movies = [] } = useMovieList();
+  const { data: favorites = [] } = useFavorites();
 
   return (
     <>
-       <Head>
+      <Head>
         <title>Nextflix</title>
         <meta property="og:title" content="Nextflix" key="title-home" />
         <meta property="og:description" content="Home page" key="home" />
@@ -40,6 +42,7 @@ const Home = () => {
      <Billboard />
      <div className="pb-40">
         <MovieList title="Trending Now" data={movies} />
+        <MovieList title="My List" data={favorites} />
       </div>
     </>
   )
