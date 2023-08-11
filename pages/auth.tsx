@@ -6,7 +6,7 @@ import logo from '@/public/pages/images/logo.png';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import { FcGoogle } from 'react-icons/fc';
-import Head from 'next/head'
+import Head from 'next/head';
 
 const Auth = () => {
   const router = useRouter();
@@ -59,6 +59,8 @@ const Auth = () => {
     <>
       <Head>
         <title>Welcome to Nextflix</title>
+        <meta property="og:title" content="Welcome to Nextflix" key="title" />
+        <meta property="og:description" content="Authentication page" key="auth" />
       </Head>
       
       <div className="relative h-full w-full bg-no-repeat bg-center bg-fixed bg-cover"
