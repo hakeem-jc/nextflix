@@ -59,8 +59,9 @@ const Auth = () => {
     <>
       <Head>
         <title>Welcome to Nextflix</title>
-        <meta property="og:title" content="Welcome to Nextflix" key="title" />
+        <meta property="og:title" content="Nextflix" key="title" />
         <meta property="og:description" content="Authentication page" key="auth" />
+        <meta property="og:author" content="Hakeem Clarke" key="author" />
       </Head>
       
       <div className="relative h-full w-full bg-no-repeat bg-center bg-fixed bg-cover"
