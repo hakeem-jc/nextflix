@@ -9,6 +9,8 @@ import InfoModal from '@/components/InfoModal';
 import useMovieList from '@/hooks/useMovieList';
 import useFavorites from '@/hooks/useFavorites';
 import useInfoModalStore from '@/hooks/useInfoModalStore';
+import Loading from '@/components/Loading';
+import useLoadingStore from '@/hooks/useLoadingStore';
 
 export async function getServerSideProps(context: NextPageContext) {
   const session = await getSession(context);
@@ -31,9 +33,11 @@ const Home = () => {
   const { data: movies = [] } = useMovieList();
   const { data: favorites = [] } = useFavorites();
   const {isOpen, closeModal} = useInfoModalStore();
+  const loading = useLoadingStore((state) => state.loading);
 
   return (
     <>
+      {loading  && <Loading />}
       <Head>
         <title>Nextflix</title>
         <meta property="og:title" content="Nextflix" key="title-home" />

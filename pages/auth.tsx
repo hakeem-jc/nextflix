@@ -7,6 +7,7 @@ import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import { FcGoogle } from 'react-icons/fc';
 import Head from 'next/head';
+import Loading from '@/components/Loading';
 
 const Auth = () => {
   const router = useRouter();
@@ -14,6 +15,7 @@ const Auth = () => {
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
   const [variant, setVariant] = useState('login');
+  const [isLoading, setIsLoading] = useState(false);
 
   const toggleVariant = useCallback(() => {
     setVariant((currentVariant) => currentVariant === 'login' ? 'register' : 'login');
@@ -21,7 +23,7 @@ const Auth = () => {
 
 
   const login = useCallback(async () => {
-    // TODO - Add loading animation
+    setIsLoading(true);
 
     try {
       await signIn('credentials', {
@@ -29,27 +31,30 @@ const Auth = () => {
         password,
         redirect: false,
         callbackUrl: '/'
+      }).then(_res => {
+        router.push('/profiles');
       });
 
-      router.push('/profiles');
     } catch (error) {
       console.log(error);
+      setIsLoading(false);
     }
   }, [email, password, router]);
 
   const register = useCallback(async () => {
-    // TODO - Add loading animation
+    setIsLoading(true);
     
     try {
       await axios.post('/api/register', {
         email,
         name,
         password
+      }).then(_res=> {
+        login();
       });
-
-      login();
     } catch (error) {
         console.log(error);
+        setIsLoading(false);
     }
   }, [email, name, password, login]);
 
@@ -57,6 +62,7 @@ const Auth = () => {
 
   return (
     <>
+      {isLoading && <Loading />}
       <Head>
         <title>Welcome to Nextflix</title>
         <meta property="og:title" content="Nextflix" key="title" />
