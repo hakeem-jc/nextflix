@@ -8,6 +8,7 @@ import { useRouter } from 'next/router';
 import { FcGoogle } from 'react-icons/fc';
 import Head from 'next/head';
 import Loading from '@/components/Loading';
+import bcrypt from 'bcryptjs';
 
 const Auth = () => {
   const router = useRouter();
@@ -43,12 +44,13 @@ const Auth = () => {
 
   const register = useCallback(async () => {
     setIsLoading(true);
+    let hashedPassword = await bcrypt.hashSync(password, 12);
     
     try {
       await axios.post('/api/register', {
         email,
         name,
-        password
+        password: hashedPassword
       }).then(_res=> {
         login();
       });
