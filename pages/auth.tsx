@@ -78,7 +78,7 @@ const Auth = () => {
           }}
       >
         <div className="bg-black w-full h-full lg:bg-opacity-50">
-          <nav className="px-12 py-5">
+          <nav className="px-12 py-5 flex items-center justify-center">
             <Image  src={logo} className="h-12" alt="Logo" width="200" height="12"/>
           </nav>
           <div className="flex justify-center">
@@ -122,7 +122,7 @@ const Auth = () => {
               <p className="text-neutral-500 mt-12">
                 {variant === 'login' ? 'First time using Netflix?' : 'Already have an account?'}
                 <span onClick={toggleVariant} className="text-white ml-1 hover:underline cursor-pointer">
-                  {variant === 'login' ? 'Create an account' : 'Login'}
+                  {variant === 'login' ? ' Create an account' : 'Login'}
                 </span>
               </p>
             </div>
