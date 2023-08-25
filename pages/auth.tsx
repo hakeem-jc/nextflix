@@ -170,11 +170,12 @@ const Auth = () => {
 
               {registerError && <p className="text-red-500 text-center pt-8">Something went wrong. Please Try Again</p>}
 
-              <div className="flex flex-row items-center gap-4 mt-8 justify-center">
+            {/* TODO - Switch for another sign in method that doesn't require manually adding test users */}
+              {/* <div className="flex flex-row items-center gap-4 mt-8 justify-center">
                 <div onClick={() => signIn('google', { callbackUrl: '/profiles' })} className="w-10 h-10 bg-white rounded-full flex items-center justify-center cursor-pointer hover:opacity-80 transition">
                   <FcGoogle size={32} />
                 </div>
-              </div>
+              </div> */}
               <p className="text-neutral-500 mt-12">
                 {variant === 'login' ? 'First time using Netflix?' : 'Already have an account?'}
                 <span onClick={toggleVariant} className="text-white ml-1 hover:underline cursor-pointer">
