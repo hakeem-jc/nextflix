@@ -12,12 +12,12 @@ import bcrypt from 'bcryptjs';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
-
 const Auth = () => {
   const router = useRouter();
   const [variant, setVariant] = useState('login');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<SignInResponse | undefined>();
+  const [registerError, setRegisterError] = useState<any>();
 
   useEffect(()=>{
     setError(undefined);
@@ -48,7 +48,6 @@ const Auth = () => {
       }).then(res => {
         if  (res?.status === 200) {
           router.push('/profiles');
-          setIsLoading(false);
         }
         else {
           setIsLoading(false);
@@ -79,6 +78,7 @@ const Auth = () => {
     } catch (error) {
         console.log(error);
         setIsLoading(false);
+        setRegisterError(error);
     }
   }, [login]);
 
@@ -167,6 +167,9 @@ const Auth = () => {
               <button type="submit" className="bg-red-600 py-3 text-white rounded-md w-full mt-10 hover:bg-red-700 transition">
                 {variant === 'login' ? 'Login' : 'Sign up'}
               </button>
+
+              {registerError && <p className="text-red-500 text-center pt-8">Something went wrong. Please Try Again</p>}
+
               <div className="flex flex-row items-center gap-4 mt-8 justify-center">
                 <div onClick={() => signIn('google', { callbackUrl: '/profiles' })} className="w-10 h-10 bg-white rounded-full flex items-center justify-center cursor-pointer hover:opacity-80 transition">
                   <FcGoogle size={32} />
