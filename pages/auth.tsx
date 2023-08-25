@@ -38,24 +38,22 @@ const Auth = () => {
   const login = useCallback(async (values:any) => {
     setIsLoading(true);
     const { email, password } = values;
-    let hashedPassword = await bcrypt.hashSync(password, 12);
 
     try {
       await signIn('credentials', {
         email,
-        password:hashedPassword,
+        password,
         redirect: false,
         callbackUrl: '/'
       }).then(res => {
-        setIsLoading(false);
         if  (res?.status === 200) {
           router.push('/profiles');
+          setIsLoading(false);
         }
         else {
+          setIsLoading(false);
           setError(res);
-        }
-        console.log(res);
-         
+        }         
       });
 
     } catch (error) {
