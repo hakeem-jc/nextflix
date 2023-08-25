@@ -60,6 +60,15 @@ const Auth = () => {
     }
   }, [email, name, password, login]);
 
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    
+    if (variant === 'login') {
+      login();
+    } else {
+      register();
+    }
+  };
   
 
   return (
@@ -81,7 +90,7 @@ const Auth = () => {
           <nav className="px-12 py-5 flex items-center justify-center">
             <Image  src={logo} className="h-12" alt="Logo" width="200" height="12"/>
           </nav>
-          <div className="flex justify-center">
+          <form onSubmit={handleSubmit} className="flex justify-center">
             <div className="bg-black bg-opacity-70 px-16 py-16 self-center mt-2 lg:w-2/5 lg:max-w-md rounded-md w-full">
               <h2 className="text-white text-4xl mb-8 font-semibold">
                 {variant === 'login' ? 'Sign in' : 'Register'}
@@ -111,7 +120,7 @@ const Auth = () => {
                   onChange={(e: any) => setPassword(e.target.value)} 
                 />
               </div>
-              <button onClick={variant === 'login' ? login : register} className="bg-red-600 py-3 text-white rounded-md w-full mt-10 hover:bg-red-700 transition">
+              <button type="submit" className="bg-red-600 py-3 text-white rounded-md w-full mt-10 hover:bg-red-700 transition">
                 {variant === 'login' ? 'Login' : 'Sign up'}
               </button>
               <div className="flex flex-row items-center gap-4 mt-8 justify-center">
@@ -126,7 +135,7 @@ const Auth = () => {
                 </span>
               </p>
             </div>
-          </div>
+          </form>
         </div>
       </div>
     </>
