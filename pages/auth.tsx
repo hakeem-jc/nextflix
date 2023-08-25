@@ -5,7 +5,7 @@ import Image from 'next/image';
 import logo from '@/public/pages/images/logo.png';
 import { signIn, SignInResponse } from 'next-auth/react';
 import { useRouter } from 'next/router';
-import { FcGoogle } from 'react-icons/fc';
+// import { FcGoogle } from 'react-icons/fc';
 import Head from 'next/head';
 import Loading from '@/components/Loading';
 import bcrypt from 'bcryptjs';
