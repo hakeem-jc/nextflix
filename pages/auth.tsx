@@ -9,12 +9,21 @@ import { FcGoogle } from 'react-icons/fc';
 import Head from 'next/head';
 import Loading from '@/components/Loading';
 import bcrypt from 'bcryptjs';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
+
+const validationSchema = Yup.object().shape({
+  email: Yup.string().email('Invalid email').required('Email is required'),
+  password: Yup.string().min(6, 'Password must be at least 6 characters').required('Password is required'),
+  // name: Yup.string().when('variant', {
+  //   is: 'register',
+  //   then: Yup.string().required('Name is required'),
+  // }),
+});
+
 
 const Auth = () => {
   const router = useRouter();
-  const [email, setEmail] = useState('');
-  const [name, setName] = useState('');
-  const [password, setPassword] = useState('');
   const [variant, setVariant] = useState('login');
   const [isLoading, setIsLoading] = useState(false);
 
@@ -23,13 +32,15 @@ const Auth = () => {
   }, []);
 
 
-  const login = useCallback(async () => {
+  const login = useCallback(async (values:any) => {
     setIsLoading(true);
+    const { email, password } = values;
+    let hashedPassword = await bcrypt.hashSync(password, 12);
 
     try {
       await signIn('credentials', {
         email,
-        password,
+        password:hashedPassword,
         redirect: false,
         callbackUrl: '/'
       }).then(_res => {
@@ -40,10 +51,12 @@ const Auth = () => {
       console.log(error);
       setIsLoading(false);
     }
-  }, [email, password, router]);
+  }, [router]);
 
-  const register = useCallback(async () => {
+  const register = useCallback(async (values:any) => {
     setIsLoading(true);
+    const { email, password, name } = values;
+
     let hashedPassword = await bcrypt.hashSync(password, 12);
     
     try {
@@ -52,23 +65,25 @@ const Auth = () => {
         name,
         password: hashedPassword
       }).then(_res=> {
-        login();
+        login({email, password:hashedPassword});
       });
     } catch (error) {
         console.log(error);
         setIsLoading(false);
     }
-  }, [email, name, password, login]);
+  }, [login]);
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    
-    if (variant === 'login') {
-      login();
-    } else {
-      register();
-    }
-  };
+  const formik = useFormik({
+    initialValues: { email: '', password: '', name: '' },
+    validationSchema,
+    onSubmit: (values) => {
+      if (variant === 'login') {
+        login(values);
+      } else {
+        register(values);
+      }
+    },
+  });
   
 
   return (
@@ -90,35 +105,51 @@ const Auth = () => {
           <nav className="px-12 py-5 flex items-center justify-center">
             <Image  src={logo} className="h-12" alt="Logo" width="200" height="12"/>
           </nav>
-          <form onSubmit={handleSubmit} className="flex justify-center">
+          <form onSubmit={formik.handleSubmit} onBlur={formik.handleBlur} className="flex justify-center">
             <div className="bg-black bg-opacity-70 px-16 py-16 self-center mt-2 lg:w-2/5 lg:max-w-md rounded-md w-full">
               <h2 className="text-white text-4xl mb-8 font-semibold">
                 {variant === 'login' ? 'Sign in' : 'Register'}
               </h2>
               <div className="flex flex-col gap-4">
                 {variant === 'register' && (
-                  <Input
-                    id="name"
-                    type="text"
-                    label="Username"
-                    value={name}
-                    onChange={(e: any) => setName(e.target.value)} 
-                  />
+                  <div>
+                    <Input
+                      id="name"
+                      type="text"
+                      label="Username"
+                      onChange={formik.handleChange}
+                      value={formik.values.name}
+                    />
+                    {formik.touched.name && formik.errors.name ? (
+                      <div className="text-red-500">{formik.errors.name}</div>
+                    ) : null}
+                  </div>
                 )}
-                <Input
-                  id="email"
-                  type="email"
-                  label="Email address or phone number"
-                  value={email}
-                  onChange={(e: any) => setEmail(e.target.value)} 
-                />
-                <Input
-                  type="password" 
-                  id="password" 
-                  label="Password" 
-                  value={password}
-                  onChange={(e: any) => setPassword(e.target.value)} 
-                />
+                <div>
+                  <Input
+                    id="email"
+                    type="email"
+                    label="Email address"
+                    onChange={formik.handleChange}
+                    value={formik.values.email}
+                  />
+                  {formik.touched.email && formik.errors.email ? (
+                    <div className="text-red-500">{formik.errors.email}</div>
+                  ) : null}
+                </div>
+                
+                <div>
+                  <Input
+                    type="password" 
+                    id="password" 
+                    label="Password" 
+                    onChange={formik.handleChange}
+                    value={formik.values.password}
+                  />
+                   {formik.touched.password && formik.errors.password ? (
+                    <div className="text-red-500">{formik.errors.password}</div>
+                  ) : null}
+                </div>
               </div>
               <button type="submit" className="bg-red-600 py-3 text-white rounded-md w-full mt-10 hover:bg-red-700 transition">
                 {variant === 'login' ? 'Login' : 'Sign up'}
