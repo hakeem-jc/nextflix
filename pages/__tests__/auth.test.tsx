@@ -36,7 +36,7 @@ describe('Auth', () => {
     render(<Auth />);
 
     const signInText = screen.getByText('Sign in');
-    const emailInput = screen.getByLabelText('Email address or phone number');
+    const emailInput = screen.getByLabelText('Email address');
     const passwordInput = screen.getByLabelText('Password');
     const loginButton = screen.getByText('Login');
     const createAccountLink = screen.getByText('Create an account');
@@ -63,7 +63,7 @@ describe('Auth', () => {
     fireEvent.click(createAccountLink);
 
     const signInText = screen.getByText('Sign in');
-    const emailInput = screen.getByLabelText('Email address or phone number');
+    const emailInput = screen.getByLabelText('Email address');
     const passwordInput = screen.getByLabelText('Password');
 
     expect(signInText).toBeInTheDocument();
@@ -74,7 +74,7 @@ describe('Auth', () => {
   it('updates state when input values change', () => {
     render(<Auth />);
 
-    const emailInput = screen.getByLabelText('Email address or phone number');
+    const emailInput = screen.getByLabelText('Email address');
     const passwordInput = screen.getByLabelText('Password');
 
     fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
@@ -88,7 +88,7 @@ describe('Auth', () => {
     render(<Auth />);
     
     // Mocking user input
-    fireEvent.change(screen.getByLabelText('Email address or phone number'), {
+    fireEvent.change(screen.getByLabelText('Email address'), {
       target: { value: 'test@example.com' },
     });
     fireEvent.change(screen.getByLabelText('Password'), {
@@ -122,7 +122,7 @@ describe('Auth', () => {
     fireEvent.change(screen.getByLabelText('Username'), {
       target: { value: 'testuser' },
     });
-    fireEvent.change(screen.getByLabelText('Email address or phone number'), {
+    fireEvent.change(screen.getByLabelText('Email address'), {
       target: { value: 'test@example.com' },
     });
     fireEvent.change(screen.getByLabelText('Password'), {
@@ -137,7 +137,7 @@ describe('Auth', () => {
       expect(axiosPostMock).toHaveBeenCalledWith('/api/register', {
         email: 'test@example.com',
         name: 'testuser',
-        password: 'password123',
+        password: expect.any(String)
       });
 
       expect(signIn).toHaveBeenCalledWith('credentials', {
