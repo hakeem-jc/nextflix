@@ -74,7 +74,7 @@ const Auth = () => {
         name,
         password: hashedPassword
       }).then(_res=> {
-        login({email, password:hashedPassword});
+        login({email, password});
       });
     } catch (error) {
         console.log(error);
