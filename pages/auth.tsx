@@ -1,9 +1,9 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useState, useEffect } from 'react';
 import axios from 'axios';
 import Input from '@/components/Input';
 import Image from 'next/image';
 import logo from '@/public/pages/images/logo.png';
-import { signIn } from 'next-auth/react';
+import { signIn, SignInResponse } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import { FcGoogle } from 'react-icons/fc';
 import Head from 'next/head';
@@ -17,6 +17,11 @@ const Auth = () => {
   const router = useRouter();
   const [variant, setVariant] = useState('login');
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<SignInResponse | undefined>();
+
+  useEffect(()=>{
+    setError(undefined);
+  },[]);
 
   const validationSchema = Yup.object().shape({
     email: Yup.string().email('Invalid email').required('Email is required'),
@@ -26,6 +31,7 @@ const Auth = () => {
 
   const toggleVariant = useCallback(() => {
     setVariant((currentVariant) => currentVariant === 'login' ? 'register' : 'login');
+    setError(undefined);
   }, []);
 
 
@@ -40,8 +46,16 @@ const Auth = () => {
         password:hashedPassword,
         redirect: false,
         callbackUrl: '/'
-      }).then(_res => {
-        router.push('/profiles');
+      }).then(res => {
+        setIsLoading(false);
+        if  (res?.status === 200) {
+          router.push('/profiles');
+        }
+        else {
+          setError(res);
+        }
+        console.log(res);
+         
       });
 
     } catch (error) {
@@ -133,6 +147,9 @@ const Auth = () => {
                   {formik.touched.email && formik.errors.email ? (
                     <div className="text-red-500">{formik.errors.email}</div>
                   ) : null}
+                  
+                  {error?.error === 'Email does not exist' && <p className="text-red-500">{error?.error}</p>}
+                  {error && error?.error !== "Incorrect password" &&  error?.error !== 'Email does not exist' && <p className="text-red-500">Email taken</p>}
                 </div>
                 
                 <div>
@@ -146,6 +163,7 @@ const Auth = () => {
                    {formik.touched.password && formik.errors.password ? (
                     <div className="text-red-500">{formik.errors.password}</div>
                   ) : null}
+                  {error?.error === "Incorrect password" && <p className="text-red-500">{error?.error}</p>}
                 </div>
               </div>
               <button type="submit" className="bg-red-600 py-3 text-white rounded-md w-full mt-10 hover:bg-red-700 transition">
